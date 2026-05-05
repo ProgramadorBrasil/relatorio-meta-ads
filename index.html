@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Resultados da Campanha - Meta Ads</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #f0f2f5;
+    color: #1c1e21;
+    padding: 20px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* Header Meta */
+  .meta-header {
+    background: #fff;
+    border-bottom: 1px solid #dadde1;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+  .meta-logo {
+    background: linear-gradient(90deg, #0064E0, #0080FF, #00A3FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 22px;
+    font-weight: 700;
+    margin-right: 16px;
+  }
+  .meta-divider { width: 1px; height: 24px; background: #dadde1; margin-right: 16px; }
+  .ads-manager-title { font-size: 15px; font-weight: 600; color: #050505; }
+  .breadcrumb { color: #65676b; font-size: 13px; margin-left: auto; }
+
+  /* Page Title */
+  .page-title-bar {
+    background: #fff;
+    padding: 20px 24px;
+    border-bottom: 1px solid #dadde1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .campaign-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: #050505;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-badge {
+    background: #e3f2e8;
+    color: #1f7a1f;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .status-dot { width: 8px; height: 8px; background: #31a24c; border-radius: 50%; }
+  .date-range {
+    color: #65676b;
+    font-size: 13px;
+    background: #f0f2f5;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #dadde1;
+  }
+
+  /* Tabs */
+  .tabs {
+    background: #fff;
+    border-bottom: 1px solid #dadde1;
+    padding: 0 24px;
+    display: flex;
+    gap: 0;
+  }
+  .tab {
+    padding: 14px 16px;
+    color: #65676b;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+  }
+  .tab.active { color: #0064e0; border-bottom-color: #0064e0; font-weight: 600; }
+
+  /* KPI Grid */
+  .kpi-section {
+    background: #fff;
+    padding: 24px;
+    border-bottom: 1px solid #dadde1;
+  }
+  .section-label {
+    font-size: 13px;
+    color: #65676b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .kpi-card {
+    background: #f7f8fa;
+    border: 1px solid #e4e6eb;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .kpi-label {
+    color: #65676b;
+    font-size: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-info-icon {
+    color: #8a8d91;
+    font-size: 12px;
+    cursor: help;
+  }
+  .kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #050505;
+    margin-bottom: 6px;
+  }
+  .kpi-change {
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .kpi-change.up { color: #31a24c; }
+  .kpi-change.down { color: #e41e3f; }
+
+  /* Chart Section */
+  .chart-section {
+    background: #fff;
+    padding: 24px;
+    border-bottom: 1px solid #dadde1;
+  }
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .chart-title { font-size: 16px; font-weight: 600; color: #050505; }
+  .chart-controls { display: flex; gap: 8px; }
+  .chart-btn {
+    background: #f0f2f5;
+    border: 1px solid #dadde1;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #050505;
+    cursor: pointer;
+  }
+  .chart-btn.active { background: #0064e0; color: #fff; border-color: #0064e0; }
+  .chart-area {
+    height: 280px;
+    background: linear-gradient(180deg, #fff 0%, #f7f8fa 100%);
+    border-radius: 8px;
+    position: relative;
+    padding: 20px;
+  }
+  .chart-svg { width: 100%; height: 100%; }
+
+  /* Performance Table */
+  .table-section {
+    background: #fff;
+    padding: 24px;
+    border-bottom: 1px solid #dadde1;
+  }
+  .perf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .perf-table th {
+    text-align: left;
+    padding: 12px 8px;
+    color: #65676b;
+    font-weight: 600;
+    border-bottom: 2px solid #e4e6eb;
+    background: #f7f8fa;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .perf-table td {
+    padding: 14px 8px;
+    border-bottom: 1px solid #e4e6eb;
+    color: #050505;
+  }
+  .perf-table tr:hover { background: #f7f8fa; }
+  .perf-table .ad-cell { display: flex; align-items: center; gap: 12px; }
+  .ad-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .ad-name { font-weight: 600; }
+  .ad-meta { color: #65676b; font-size: 11px; margin-top: 2px; }
+  .num-bold { font-weight: 600; }
+
+  /* Audience Section */
+  .audience-section {
+    background: #fff;
+    padding: 24px;
+    border-bottom: 1px solid #dadde1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .demo-block h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #050505;
+  }
+  .demo-bar-container { margin-bottom: 12px; }
+  .demo-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: #050505;
+    margin-bottom: 4px;
+  }
+  .demo-bar-track {
+    height: 8px;
+    background: #e4e6eb;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .demo-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0064e0, #00a3ff);
+    border-radius: 4px;
+  }
+  .demo-bar-fill.pink { background: linear-gradient(90deg, #dd2a7b, #f58529); }
+
+  /* Placement Section */
+  .placement-section {
+    background: #fff;
+    padding: 24px;
+    border-bottom: 1px solid #dadde1;
+  }
+  .placement-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .placement-card {
+    border: 1px solid #e4e6eb;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+  }
+  .placement-icon {
+    width: 36px;
+    height: 36px;
+    margin: 0 auto 8px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+  }
+  .placement-name { font-size: 13px; font-weight: 600; color: #050505; margin-bottom: 4px; }
+  .placement-stat { font-size: 18px; font-weight: 700; color: #0064e0; }
+  .placement-sub { font-size: 11px; color: #65676b; }
+
+  /* Footer */
+  .footer-info {
+    background: #f7f8fa;
+    padding: 20px 24px;
+    border-top: 1px solid #dadde1;
+    border-radius: 0 0 8px 8px;
+    font-size: 12px;
+    color: #65676b;
+    text-align: center;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .container { max-width: 100%; }
+    .meta-header, .page-title-bar, .tabs, .kpi-section, .chart-section,
+    .table-section, .audience-section, .placement-section, .footer-info {
+      box-shadow: none;
+      page-break-inside: avoid;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Meta Header -->
+  <div class="meta-header">
+    <div class="meta-logo">Meta</div>
+    <div class="meta-divider"></div>
+    <div class="ads-manager-title">Gerenciador de Anúncios</div>
+    <div class="breadcrumb">Conta › Campanhas › Detalhes</div>
+  </div>
+
+  <!-- Page Title -->
+  <div class="page-title-bar">
+    <div>
+      <div class="campaign-name">
+        Campanha_Gracie_Leiloes_Outubro2026
+        <span class="status-badge"><span class="status-dot"></span>Ativa</span>
+      </div>
+      <div style="color:#65676b;font-size:13px;margin-top:4px;">ID da campanha: 23857294012340876 · Objetivo: Reconhecimento da marca</div>
+    </div>
+    <div class="date-range">📅 1 out 2026 - 31 out 2026</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active">Visão geral</div>
+    <div class="tab">Desempenho</div>
+    <div class="tab">Demografia</div>
+    <div class="tab">Posicionamento</div>
+    <div class="tab">Veiculação</div>
+  </div>
+
+  <!-- KPIs Principais -->
+  <div class="kpi-section">
+    <div class="section-label">Resultados principais</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Alcance <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">487.234</div>
+        <div class="kpi-change up">▲ 23,4% vs período anterior</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Impressões <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">1.284.567</div>
+        <div class="kpi-change up">▲ 31,2% vs período anterior</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Frequência <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">2,64</div>
+        <div class="kpi-change up">▲ 0,18 vs período anterior</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Valor gasto <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">R$ 8.450,00</div>
+        <div class="kpi-change down">▼ R$ 250 abaixo do orçamento</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPM <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">R$ 6,58</div>
+        <div class="kpi-change up">▲ Bom (média setor: R$ 9,20)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CTR <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">3,42%</div>
+        <div class="kpi-change up">▲ Acima da média (1,8%)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">CPC <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">R$ 0,19</div>
+        <div class="kpi-change up">▲ 28% abaixo do benchmark</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cliques no link <span class="kpi-info-icon">ⓘ</span></div>
+        <div class="kpi-value">43.952</div>
+        <div class="kpi-change up">▲ 18,7% vs período anterior</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Engajamento -->
+  <div class="kpi-section">
+    <div class="section-label">Engajamento</div>
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Curtidas</div>
+        <div class="kpi-value">12.847</div>
+        <div class="kpi-change up">▲ 42% vs período anterior</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Comentários</div>
+        <div class="kpi-value">1.234</div>
+        <div class="kpi-change up">▲ 67%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Compartilhamentos</div>
+        <div class="kpi-value">3.421</div>
+        <div class="kpi-change up">▲ 89%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Salvamentos</div>
+        <div class="kpi-value">2.156</div>
+        <div class="kpi-change up">▲ 124%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráfico -->
+  <div class="chart-section">
+    <div class="chart-header">
+      <div class="chart-title">Desempenho ao longo do tempo</div>
+      <div class="chart-controls">
+        <button class="chart-btn active">Impressões</button>
+        <button class="chart-btn">Alcance</button>
+        <button class="chart-btn">Cliques</button>
+        <button class="chart-btn">Gastos</button>
+      </div>
+    </div>
+    <div class="chart-area">
+      <svg class="chart-svg" viewBox="0 0 800 240" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#0064e0;stop-opacity:0.3" />
+            <stop offset="100%" style="stop-color:#0064e0;stop-opacity:0" />
+          </linearGradient>
+        </defs>
+        <!-- Grid -->
+        <line x1="0" y1="60" x2="800" y2="60" stroke="#e4e6eb" stroke-dasharray="4,4"/>
+        <line x1="0" y1="120" x2="800" y2="120" stroke="#e4e6eb" stroke-dasharray="4,4"/>
+        <line x1="0" y1="180" x2="800" y2="180" stroke="#e4e6eb" stroke-dasharray="4,4"/>
+        <!-- Area -->
+        <path d="M 0 200 L 60 180 L 120 165 L 180 140 L 240 145 L 300 110 L 360 95 L 420 85 L 480 70 L 540 60 L 600 55 L 660 45 L 720 40 L 800 35 L 800 240 L 0 240 Z"
+              fill="url(#grad1)"/>
+        <!-- Line -->
+        <path d="M 0 200 L 60 180 L 120 165 L 180 140 L 240 145 L 300 110 L 360 95 L 420 85 L 480 70 L 540 60 L 600 55 L 660 45 L 720 40 L 800 35"
+              stroke="#0064e0" stroke-width="3" fill="none"/>
+        <!-- Points -->
+        <circle cx="180" cy="140" r="4" fill="#0064e0"/>
+        <circle cx="360" cy="95" r="4" fill="#0064e0"/>
+        <circle cx="540" cy="60" r="4" fill="#0064e0"/>
+        <circle cx="720" cy="40" r="4" fill="#0064e0"/>
+        <!-- X labels -->
+        <text x="0" y="235" font-size="10" fill="#65676b">01/out</text>
+        <text x="180" y="235" font-size="10" fill="#65676b">08/out</text>
+        <text x="360" y="235" font-size="10" fill="#65676b">15/out</text>
+        <text x="540" y="235" font-size="10" fill="#65676b">22/out</text>
+        <text x="720" y="235" font-size="10" fill="#65676b">31/out</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Performance por anúncio -->
+  <div class="table-section">
+    <div class="section-label">Desempenho por anúncio</div>
+    <table class="perf-table">
+      <thead>
+        <tr>
+          <th>Anúncio</th>
+          <th>Impressões</th>
+          <th>Alcance</th>
+          <th>Cliques</th>
+          <th>CTR</th>
+          <th>CPC</th>
+          <th>Gasto</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="ad-cell">
+              <div class="ad-thumb">01</div>
+              <div>
+                <div class="ad-name">Reel - Hospital Memorial</div>
+                <div class="ad-meta">Reels · Vídeo 30s · ID 6573421890</div>
+              </div>
+            </div>
+          </td>
+          <td class="num-bold">428.512</td>
+          <td>178.234</td>
+          <td class="num-bold">14.823</td>
+          <td>3,46%</td>
+          <td>R$ 0,17</td>
+          <td>R$ 2.520,00</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ad-cell">
+              <div class="ad-thumb">02</div>
+              <div>
+                <div class="ad-name">Story - Edital Leilão</div>
+                <div class="ad-meta">Stories · Imagem · ID 6573421891</div>
+              </div>
+            </div>
+          </td>
+          <td class="num-bold">312.876</td>
+          <td>134.567</td>
+          <td class="num-bold">11.245</td>
+          <td>3,59%</td>
+          <td>R$ 0,18</td>
+          <td>R$ 2.024,10</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ad-cell">
+              <div class="ad-thumb">03</div>
+              <div>
+                <div class="ad-name">Carrossel - 7 Imóveis</div>
+                <div class="ad-meta">Feed · Carrossel · ID 6573421892</div>
+              </div>
+            </div>
+          </td>
+          <td class="num-bold">298.421</td>
+          <td>112.890</td>
+          <td class="num-bold">9.876</td>
+          <td>3,31%</td>
+          <td>R$ 0,21</td>
+          <td>R$ 2.073,96</td>
+        </tr>
+        <tr>
+          <td>
+            <div class="ad-cell">
+              <div class="ad-thumb">04</div>
+              <div>
+                <div class="ad-name">Reel - Tour Hospital</div>
+                <div class="ad-meta">Reels · Vídeo 45s · ID 6573421893</div>
+              </div>
+            </div>
+          </td>
+          <td class="num-bold">244.758</td>
+          <td>61.543</td>
+          <td class="num-bold">8.008</td>
+          <td>3,27%</td>
+          <td>R$ 0,23</td>
+          <td>R$ 1.831,94</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Demografia -->
+  <div class="audience-section">
+    <div class="demo-block">
+      <h3>Idade e gênero</h3>
+      <div style="font-size:13px;color:#65676b;margin-bottom:16px;">Distribuição percentual do alcance</div>
+
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>25-34 (Homens)</span><span class="num-bold">28,4%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:78%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>35-44 (Homens)</span><span class="num-bold">22,1%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:62%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>45-54 (Homens)</span><span class="num-bold">14,7%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:42%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>25-34 (Mulheres)</span><span class="num-bold">12,3%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill pink" style="width:35%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>35-44 (Mulheres)</span><span class="num-bold">11,8%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill pink" style="width:33%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>45-54 (Mulheres)</span><span class="num-bold">7,2%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill pink" style="width:20%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>55-64 (Todos)</span><span class="num-bold">3,5%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:10%"></div></div>
+      </div>
+    </div>
+
+    <div class="demo-block">
+      <h3>Localização (Top 7 cidades)</h3>
+      <div style="font-size:13px;color:#65676b;margin-bottom:16px;">Pernambuco e estados vizinhos</div>
+
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Recife - PE</span><span class="num-bold">42,8%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:95%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Olinda - PE</span><span class="num-bold">18,2%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:42%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Jaboatão - PE</span><span class="num-bold">12,4%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:28%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>João Pessoa - PB</span><span class="num-bold">8,9%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:21%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Caruaru - PE</span><span class="num-bold">6,7%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:15%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Maceió - AL</span><span class="num-bold">5,4%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:12%"></div></div>
+      </div>
+      <div class="demo-bar-container">
+        <div class="demo-bar-label"><span>Natal - RN</span><span class="num-bold">5,6%</span></div>
+        <div class="demo-bar-track"><div class="demo-bar-fill" style="width:13%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Posicionamento -->
+  <div class="placement-section">
+    <div class="section-label">Posicionamento dos anúncios</div>
+    <div style="font-size:13px;color:#65676b;">Performance por canal e formato</div>
+    <div class="placement-grid">
+      <div class="placement-card">
+        <div class="placement-icon">📱</div>
+        <div class="placement-name">Instagram Reels</div>
+        <div class="placement-stat">52,4%</div>
+        <div class="placement-sub">do alcance total</div>
+      </div>
+      <div class="placement-card">
+        <div class="placement-icon">📸</div>
+        <div class="placement-name">Instagram Stories</div>
+        <div class="placement-stat">24,8%</div>
+        <div class="placement-sub">do alcance total</div>
+      </div>
+      <div class="placement-card">
+        <div class="placement-icon">🖼️</div>
+        <div class="placement-name">Instagram Feed</div>
+        <div class="placement-stat">15,2%</div>
+        <div class="placement-sub">do alcance total</div>
+      </div>
+      <div class="placement-card">
+        <div class="placement-icon">🔍</div>
+        <div class="placement-name">Explorar</div>
+        <div class="placement-stat">7,6%</div>
+        <div class="placement-sub">do alcance total</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-info">
+    <div style="margin-bottom:8px;">
+      <strong>Meta Ads Manager</strong> · Conta de Anúncios: act_8473625190 · Moeda: BRL · Fuso: GMT-3
+    </div>
+    <div>
+      Dados atualizados em 31 out 2026 às 23h59 (BRT) · Os resultados podem variar até 48h após o término da campanha conforme atribuição.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
